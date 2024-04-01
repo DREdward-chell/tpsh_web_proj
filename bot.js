@@ -15,17 +15,36 @@ bot.command("register", (ctx) => {
     "open webapp",
     Markup.keyboard([
       Markup.button.webApp(
-        "Open",
+        "Webview",
         "https://tg-bot-web-app-pps.vercel.app/"
       )
     ])
   );
 });
-bot.on("message", async (ctx) => {
-  console.log(ctx.message.web_app_data)
-  return ctx.reply(ctx.message.web_app_data.data)
 
+let buttons = [['Zxc', '1'], ['foo', '2'], ['bar', '3'], ['baz', '4'], ['baf', '5'], ['raf', '6']]
+
+bot.command('menu', async (ctx) => {
+  let keyboardArray = [];
+  for (let i = 0; i < buttons.length / 2; i++) {
+    keyboardArray.push([Markup.button.callback(buttons[i][0], buttons[i][1]),
+      Markup.button.callback(buttons[i + 1][0], buttons[i + 1][1])]);
+  }
+  const keyboard = Markup.keyboard(keyboardArray);
+
+  return await ctx.reply('You opened menu', keyboard.oneTime().resize());
 });
+
+bot.hears('zxc', async (ctx) => {
+  console.log('Button 1 pressed');
+  // You can add your desired actions here without sending a message back to the bot
+});
+
+// bot.on("message", async (ctx) => {
+//   console.log(ctx.message.web_app_data)
+//   return ctx.reply(ctx.message.web_app_data.data)
+// });
+
 
 bot.launch();
 // Enable graceful stop
