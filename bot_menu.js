@@ -1,5 +1,9 @@
 const { Markup } = require("telegraf");
 
+function button(text, callback) {
+    return Markup.button.callback(text, callback);
+}
+
 function initBotMenu(bot) {
     let menuButtons = [
         [button("🎭 События", "events"), button("🎞️ Кино", "cinema")],
@@ -63,3 +67,4 @@ function initBotMenu(bot) {
     ctx.editMessageText("🏠 Что не так с домом?", keyboard)
     })
 }
+module.exports = initBotMenu
