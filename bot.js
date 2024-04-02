@@ -1,57 +1,68 @@
-const { Telegraf, Router, Context, Markup } = require("telegraf");
+const { Telegraf, Markup } = require("telegraf");
 const LocalSession = require("telegraf-session-local");
-const { message } = require("telegraf/filters");
-const express = require("express");
+import initBotMenu from "./bot_menu.js";
 
-const bot = new Telegraf("7044967471:AAE2LjXlasCi2DCjFTQ8qej9mZK7vNcKFGs");
-const session = new LocalSession("sessions.json");
-var context = 0;
-bot.start((ctx) => {
-  context = ctx.chat.id;
-  console.log(context);
-});
+const bot = new Telegraf("7010352501:AAFxZmsJtChCGdm9a83Bxe9lupnEQwlA8DQ");
+const session = new LocalSession({database: "sessions.json"});
 bot.use(session.middleware());
+
+function button(text, callback) {
+  return Markup.button.callback(text, callback);
+}
+
+function filter(filt) {
+  if (filt)
+    return "✅"
+  return "❌"
+}
+
+function initFilters(ctx) {
+  // cinema filters
+  if (!ctx.session.drama)
+    ctx.session.drama = false;
+  if (!ctx.session.horror)
+    ctx.session.horror = false;
+  if (!ctx.session.comedy)
+    ctx.session.comedy = false;
+  if (!ctx.session.thriller)
+    ctx.session.thriller = false;
+  // events filters
+  if (!ctx.session.restaurants)
+    ctx.session.restaurants = false;
+  if (!ctx.session.party)
+    ctx.session.party = false;
+  if (!ctx.session.concert)
+    ctx.session.concert = false;
+}
+
+bot.start((ctx) => initFilters(ctx));
+initBotMenu(bot)
 
 bot.command("register", (ctx) => {
   return ctx.reply(
     "open webapp",
     Markup.keyboard([
-      Markup.button.webApp("Webview", "https://tg-bot-web-app-pps.vercel.app/"),
+      Markup.button.webApp("Webview", "https://tg-bot-web-app-pps.vercel.app/movie"),
     ])
   );
 });
 
-let buttons = [
-  ["🎭 События", "1"],
-  ["🎞️ Кино", "2"],
-  ["☁️ Погода", "3"],
-  ["🗞️ Новости", "4"],
-  ["🏠 Мой дом", "5"],
-  ["💛 Ограниченные возможности", "6"],
-];
-
-bot.command("menu", async (ctx) => {
-  let keyboardArray = [];
-  for (let i = 0; i < buttons.length / 2; i++) {
-    keyboardArray.push([
-      Markup.button.callback(buttons[i][0], buttons[i][1]),
-      Markup.button.callback(buttons[i + 1][0], buttons[i + 1][1]),
-    ]);
-  }
-  const keyboard = Markup.keyboard(keyboardArray);
-
-  return await ctx.reply("You opened menu", keyboard.oneTime().resize());
-});
-
-bot.hears("zxc", async (ctx) => {
-  console.log("Button 1 pressed");
-  // You can add your desired actions here without sending a message back to the bot
-});
-
-// bot.on("message", async (ctx) => {
-//   console.log(ctx.message.web_app_data)
-//   return ctx.reply(ctx.message.web_app_data.data)
-// });
+let cinemaFilters = async (ctx) => {
+  let buttons = [
+    [button(`${filter(ctx.session.drama)} Drama`, `dramaC`)],
+    [button(`${filter(ctx.session.comedy)} Comedy`, `comedyC`)],
+    [button(`${filter(ctx.session.horror)} Horror`, `horrorC`)],
+    [button(`${filter(ctx.session.thriller)} Thriller`, `thrillerC`)],
+    [button("⬅ Назад", "back")]
+  ]
+  const keyboard = Markup.inlineKeyboard(buttons)
+  ctx.editMessageText("🎯 Мои фильтры", keyboard)
+}
+bot.action("cinemaFilters", cinemaFilters)
+bot.action("dramaC", async (ctx) => {ctx.session.drama = !ctx.session.drama; cinemaFilters(ctx)})
+bot.action("comedyC", async (ctx) => {ctx.session.comedy = !ctx.session.comedy; cinemaFilters(ctx)})
+bot.action("horrorC", async (ctx) => {ctx.session.horror = !ctx.session.horror; cinemaFilters(ctx)})
+bot.action("thrillerC", async (ctx) => {ctx.session.thriller = !ctx.session.thriller; cinemaFilters(ctx)})
 
 bot.launch();
 // Enable graceful stop
