@@ -13,15 +13,15 @@ function button(text, callback) {
 
 
 
-bot.start((ctx) => {initFilters(ctx);
-ctx.reply('Привет! Я - VL бот. Моя цель - автоматизировать решение вопросов, связанных с жизнью во Владивостоке.Для начала работы введите Email.');
+bot.start((ctx) => {
+ctx.reply('Привет! Я - VL бот. Моя цель автоматизировать решение вопросов, связанных с жизнью во Владивостоке.Чтобы начать работу , вам нужно ввести Email.');
 });
 
 bot.on('text', (ctx) => {
   if(!ctx.session.email){
   const userEmail = ctx.message.text;
   ctx.session.email = userEmail;
-  ctx.reply(`Спасибо! Ваш email ${userEmail} успешно сохранен.`);}
+  ctx.reply(`Спасибо! Ваш email ${userEmail} успешно сохранен. Пожалуйста придумайте пароль.`);}
   else if(!ctx.session.password){
     const userPassword = ctx.message.text;
     ctx.session.password = userPassword;
