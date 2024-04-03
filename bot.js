@@ -1,5 +1,5 @@
 const { Telegraf, Markup } = require("telegraf");
-const LocalSession = require("telegraf-session-local");
+const LocalSession = require ("telegraf-session-local");
 const initBotMenu = require("./bot_menu");
 
 const bot = new Telegraf("7010352501:AAFxZmsJtChCGdm9a83Bxe9lupnEQwlA8DQ");
@@ -14,19 +14,9 @@ function button(text, callback) {
 
 
 bot.start((ctx) => {
-ctx.reply('Привет! Я - VL бот. Моя цель автоматизировать решение вопросов, связанных с жизнью во Владивостоке.Чтобы начать работу , вам нужно ввести Email.');
+ctx.reply('Привет! Я - VL бот. Моя цель автоматизировать решение вопросов, связанных с жизнью во Владивостоке.Чтобы начать работу нажмите /menu.');
 });
 
-bot.on('text', (ctx) => {
-  if(!ctx.session.email){
-  const userEmail = ctx.message.text;
-  ctx.session.email = userEmail;
-  ctx.reply(`Спасибо! Ваш email ${userEmail} успешно сохранен. Пожалуйста придумайте пароль.`);}
-  else if(!ctx.session.password){
-    const userPassword = ctx.message.text;
-    ctx.session.password = userPassword;
-    ctx.reply('Спасибо! Ваш пароль успешно сохранен.')}
-});
 
 
 
