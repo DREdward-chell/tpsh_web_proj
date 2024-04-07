@@ -1,22 +1,27 @@
 {
   "sessions": [
     {
-      "id": "1897257655:1897257655",
-      "data": {
-        "drama": false
-      }
-    },
-    {
       "id": "1828681389:1828681389",
       "data": {
-        "drama": true
+        "drama": false,
+        "horror": false,
+        "comedy": false,
+        "thriller": false,
+        "restaurants": false,
+        "party": false,
+        "concert": false
       }
     },
     {
-      "id": "5125350758:5125350758",
+      "id": "1104733553:1104733553",
       "data": {
-        "email": "mark.anofriev@gmail.com",
-        "password": "Fvg"
+        "restaurants": true,
+        "party": true,
+        "concert": true,
+        "horror": true,
+        "comedy": true,
+        "drama": true,
+        "thriller": true
       }
     }
   ]
